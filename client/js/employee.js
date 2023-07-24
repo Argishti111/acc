@@ -98,7 +98,7 @@ function addRow(element,mainDiv, dat){
 
 
 function addNewEmployee(element){
-    let elems = element.parentNode.getElementsByTagName("input");
+    let elems = element.parentNode.previousSibling.getElementsByTagName("input");
     let reqBody = {};
     for(let k = 0; k < elems.length; k++){
         reqBody[elems[k].name] = elems[k].value;
@@ -111,7 +111,7 @@ function addNewEmployee(element){
 }
 
 function deleteEmployee(element){
-    let elems = element.parentNode.getElementsByTagName("input");
+    let elems = element.parentNode.previousSibling.getElementsByTagName("input");
     let reqBody = {};
     for(let k = 0; k < elems.length; k++){
         if(elems[k].name === "id"){

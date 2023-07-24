@@ -31,11 +31,11 @@ router.post("/add", async (req,res) => {
         const resultCompEmp = await pool.query(
             `SELECT * FROM add_or_edit_employee_to_company(${id},${1},'${hire_date}',${fire_date},${working_hours}::smallint)`
         );
-        res.send("success");
+        res.send({success: true});
     }
     catch (e) {
         console.log(e);
-        res.send("fail");
+        res.send({success:false});
     }
 
 })
