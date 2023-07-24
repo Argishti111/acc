@@ -5,9 +5,15 @@ const pool = require("../config/connectionDB");
 router.post("/", async (req,res)=> {
     let {companyId,ssn} = req.body;
 
-    const result = await pool.query(`SELECT * FROM get_employees(${companyId},${ssn}::varchar)`);
+    try{
+        const result = await pool.query(`SELECT * FROM get_employees(${companyId},${ssn}::varchar)`);
+        res.send(result);
+    }
+    catch (e){
+        console.log(e);
+        res.send("fail");
+    }
 
-    res.send(result)
 });
 
 router.post("/add", async (req,res) => {
@@ -15,17 +21,23 @@ router.post("/add", async (req,res) => {
 
     id = isNaN(id) || id === "" ? 0 : parseInt(id);
     fire_date = fire_date === "" ? null : "'" + fire_date + "'";
+    try{
+        const resultEmp = await pool.query(
+            `SELECT * FROM add_or_edit_employee(${id},'${first_name}','${last_name}','${ssn}'::varchar,'${passport}','${address}')`
+        );
 
-    const resultEmp = await pool.query(
-        `SELECT * FROM add_or_edit_employee(${id},'${first_name}','${last_name}','${ssn}'::varchar,'${passport}','${address}')`
-    );
+        id = resultEmp.rows[0].employee_id;
 
-    id = resultEmp.rows[0].employee_id;
+        const resultCompEmp = await pool.query(
+            `SELECT * FROM add_or_edit_employee_to_company(${id},${1},'${hire_date}',${fire_date},${working_hours}::smallint)`
+        );
+        res.send("success");
+    }
+    catch (e) {
+        console.log(e);
+        res.send("fail");
+    }
 
-    const resultCompEmp = await pool.query(
-        `SELECT * FROM add_or_edit_employee_to_company(${id},${1},'${hire_date}',${fire_date},${working_hours}::smallint)`
-    );
-    res.send("success");
 })
 
 module.exports = router;
