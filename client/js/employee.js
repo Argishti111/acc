@@ -4,17 +4,22 @@ fetch("/employee",{
     body: JSON.stringify({companyId: 1, ssn: null})
 }).then(data => data?.json())
     .then(dat => {
-        let mainDiv = document.getElementsByClassName("employees-main")[0];
+        let mainDiv = document.getElementsByClassName("employee-main-table")[0];
+        let mainHeaderDiv = document.getElementsByClassName("table-header")[0];
         let headerDiv = document.createElement("div");
-        mainDiv.appendChild(headerDiv);
+        mainHeaderDiv.appendChild(headerDiv);
         for (let j = 0; j < dat.rows.length; j++){
+            let rowDiv = document.createElement("div");
+            rowDiv.className = "row-div";
+            mainDiv.appendChild(rowDiv);
             let div = document.createElement("div");
-            mainDiv.appendChild(div);
+            rowDiv.appendChild(div);
             let fieldNames = Object.keys(dat.rows[j]);
             for(let i = 0; i < fieldNames.length; i++){
                 if(j === 0) {
                     let el = document.createElement("input");
                     el.value = fieldNames[i];
+                    el.className = "employee-table-header"
                     el.disabled = true;
                     headerDiv.appendChild(el);
                     if(el.value === "id") el.style.display = "none";
@@ -27,6 +32,7 @@ fetch("/employee",{
                 div.appendChild(elem)
                 if(elem.name === "id") elem.style.display = "none";
             }
+            let buttonDiv = document.createElement("div");
             let buttonSave = document.createElement("button");
             buttonSave.innerText = "Save";
             buttonSave.onclick = function (){
@@ -37,19 +43,24 @@ fetch("/employee",{
             buttonDelete.onclick = function (){
                 deleteEmployee(this);
             }
-            div.appendChild(buttonSave);
-            div.appendChild(buttonDelete);
+            rowDiv.appendChild(buttonDiv);
+            buttonDiv.appendChild(buttonSave);
+            buttonDiv.appendChild(buttonDelete);
         }
-        let addIcon = document.createElement("p");
+        let addIcon = document.createElement("span");
         addIcon.innerText = "+";
+        addIcon.className = "add-new-employee";
         addIcon.style.cursor = "pointer";
         addIcon.onclick = function (){addRow(addIcon,mainDiv, dat)};
         mainDiv.appendChild(addIcon);
     });
 
 function addRow(element,mainDiv, dat){
+    let rowDiv = document.createElement("div");
+    rowDiv.className = "row-div";
+    mainDiv.appendChild(rowDiv);
     let div = document.createElement("div");
-    mainDiv.appendChild(div);
+    rowDiv.appendChild(div);
     let fieldNames = Object.keys(dat.rows[0]);
     for(let i = 0; i < fieldNames.length; i++) {
         let elem = document.createElement("input");
@@ -60,11 +71,14 @@ function addRow(element,mainDiv, dat){
         if(elem.name === "id") elem.style.display = "none";
     }
     mainDiv.removeChild(element);
-    let addIcon = document.createElement("p");
+    let addIcon = document.createElement("span");
     addIcon.innerText = "+";
+    addIcon.className = "add-new-employee";
     addIcon.style.cursor = "pointer";
     addIcon.onclick = function (){addRow(addIcon,mainDiv, dat)};
     mainDiv.appendChild(addIcon);
+
+    let buttonDiv = document.createElement("div");
 
     let buttonSave = document.createElement("button");
     buttonSave.innerText = "Save";
@@ -76,8 +90,9 @@ function addRow(element,mainDiv, dat){
     buttonDelete.onclick = function (){
         deleteEmployee(this);
     }
-    div.appendChild(buttonSave);
-    div.appendChild(buttonDelete);
+    rowDiv.appendChild(buttonDiv);
+    buttonDiv.appendChild(buttonSave);
+    buttonDiv.appendChild(buttonDelete);
 }
 
 

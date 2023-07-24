@@ -1,0 +1,26 @@
+.employees-main input {
+    margin: 5px;
+    padding: 10px 5px;
+    border: 2px solid dodgerblue;
+    border-radius: 10%;
+}
+
+.row-div{
+    display: flex;
+    justify-content: space-between;
+    border-top: 3px dashed gray;
+}
+
+.employee-table-header {
+    background: antiquewhite;
+}
+
+button {
+    padding: 10px 5px;
+    margin-left: 5px;
+}
+
+.add-new-employee{
+    font-size: 50px;
+    color: cadetblue;
+}
